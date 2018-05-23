@@ -80,6 +80,7 @@ MONGO_OPLOG_SIZE # not set, but you can override the default
 MONGO_SECONDARY mongo2:27017
 MONGO_ARBITER mongo3:27017
 MONGO_DB_PATH /data/db
+MONGO_BIND_IP ""
 
 # mongo root user
 MONGO_ROOT_USER root

@@ -1,33 +1,40 @@
-mongo1:
-  restart: always
-  environment:
-    MONGO_ROLE: primary
-  tty: true
-  hostname: mongo1
-  image: ongoworks/mongo-rep-set:latest
-  links:
-  - mongo2:mongo2
-  - mongo3:mongo3
-  stdin_open: true
+version: "3.1"
 
-mongo2:
-  restart: always
-  tty: true
-  hostname: mongo2
-  image: ongoworks/mongo-rep-set:latest
-  links:
-  - mongo1:mongo1
-  - mongo3:mongo3
-  stdin_open: true
+services:
+  mongo1:
+    restart: always
+    environment:
+      MONGO_ROLE: primary
+      MONGO_BIND_IP: "0.0.0.0"
+    ports:
+      - "27017:27017"
+    tty: true
+    depends_on:
+      - mongo2
+      - mongo3
+    hostname: mongo1
+    image: mongo-rep-set:latest
+    stdin_open: true
 
-mongo3:
-  restart: always
-  environment:
-    JOURNALING: 'no'
-  tty: true
-  hostname: mongo3
-  image: ongoworks/mongo-rep-set:latest
-  links:
-  - mongo1:mongo1
-  - mongo2:mongo2
-  stdin_open: true
+  mongo2:
+    restart: always
+    tty: true
+    environment:
+      MONGO_BIND_IP: "0.0.0.0"
+    ports:
+      - "27018:27017"
+    hostname: mongo2
+    image: mongo-rep-set:latest
+    stdin_open: true
+
+  mongo3:
+    restart: always
+    environment:
+      JOURNALING: 'no'
+      MONGO_BIND_IP: "0.0.0.0"
+    ports:
+      - "27019:27017"
+    tty: true
+    hostname: mongo3
+    image: mongo-rep-set:latest
+    stdin_open: true
